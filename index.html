@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#c4261d" />
+    <meta name="description" content="综合发展指数（CDI）国家查询、比较、排名与可复算方法。" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="CDI" />
+    <title>CDI · 综合发展指数</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./assets/cdi-mark.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./assets/cdi-192.png" />
+    <link rel="stylesheet" href="./css/styles.css?v=20260921b" />
+  </head>
+  <body data-density="standard">
+    <a id="skip-link" class="skip-link" href="#main">跳到主要内容</a>
+
+    <header class="site-header">
+      <a id="wordmark" class="wordmark" href="#country" aria-label="CDI 首页">
+        <span class="wordmark__index">CDI</span>
+        <span id="wordmark-name" class="wordmark__name">综合发展指数</span>
+      </a>
+
+      <nav class="primary-nav" aria-label="主要导航">
+        <a href="#country" data-route="country">国家</a>
+        <a href="#compare" data-route="compare">比较</a>
+        <a href="#ranking" data-route="ranking">排名</a>
+        <a href="#method" data-route="method">方法</a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="language-toggle" class="text-button" type="button">EN</button>
+        <button id="install-button" class="text-button" type="button" hidden>安装</button>
+        <button id="tweaks-toggle" class="text-button" type="button" aria-expanded="false" aria-controls="tweaks-panel">显示</button>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section id="view-country" class="view" data-view="country" aria-labelledby="country-view-title"></section>
+      <section id="view-compare" class="view" data-view="compare" aria-labelledby="compare-view-title" hidden></section>
+      <section id="view-ranking" class="view" data-view="ranking" aria-labelledby="ranking-view-title" hidden></section>
+      <section id="view-method" class="view" data-view="method" aria-labelledby="method-view-title" hidden></section>
+    </main>
+
+    <aside id="tweaks-panel" class="tweaks" aria-labelledby="tweaks-title" hidden>
+      <div class="tweaks__header">
+        <h2 id="tweaks-title">显示</h2>
+        <button id="tweaks-close" class="icon-button" type="button" aria-label="关闭显示设置">×</button>
+      </div>
+      <fieldset>
+        <legend id="density-legend">信息密度</legend>
+        <label><input type="radio" name="density" value="compact" /> <span id="density-compact">紧凑</span></label>
+        <label><input type="radio" name="density" value="standard" checked /> <span id="density-standard">标准</span></label>
+        <label><input type="radio" name="density" value="relaxed" /> <span id="density-relaxed">宽松</span></label>
+      </fieldset>
+      <label class="toggle-row">
+        <span id="bilingual-name-label">显示双语国名</span>
+        <input id="bilingual-name-toggle" type="checkbox" />
+      </label>
+    </aside>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <noscript>
+      <p class="noscript">CDI requires JavaScript / 此应用需要启用 JavaScript。</p>
+    </noscript>
+
+    <script type="module" src="./js/app.js?v=20260921b"></script>
+  </body>
+</html>

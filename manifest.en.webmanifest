@@ -1,0 +1,31 @@
+{
+  "name": "CDI · Composite Development Index",
+  "short_name": "CDI",
+  "description": "Country lookup, comparison, ranking, and methodology for the Composite Development Index.",
+  "start_url": "./?lang=en#country",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#c4261d",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "./assets/cdi-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/cdi-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/cdi-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

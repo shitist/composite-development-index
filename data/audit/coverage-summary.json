@@ -1,0 +1,214 @@
+{
+  "headline_scope": "sovereign_195",
+  "sovereign_195": {
+    "count": 195,
+    "score_status": {
+      "calculated_with_substitution_or_inference": 107,
+      "insufficient_data": 39,
+      "fully_observed": 49
+    },
+    "indicator_coverage": {
+      "gni": {
+        "available": 186,
+        "missing": 9,
+        "statuses": {
+          "missing": 9,
+          "observed": 184,
+          "substituted_older_year": 2
+        }
+      },
+      "pct": {
+        "available": 195,
+        "missing": 0,
+        "statuses": {
+          "inferred_zero": 74,
+          "observed": 121
+        }
+      },
+      "nature": {
+        "available": 195,
+        "missing": 0,
+        "statuses": {
+          "inferred_zero": 13,
+          "observed": 182
+        }
+      },
+      "hcr": {
+        "available": 195,
+        "missing": 0,
+        "statuses": {
+          "inferred_zero": 140,
+          "observed": 55
+        }
+      },
+      "life": {
+        "available": 194,
+        "missing": 1,
+        "statuses": {
+          "missing": 1,
+          "observed": 194
+        }
+      },
+      "electricity": {
+        "available": 192,
+        "missing": 3,
+        "statuses": {
+          "missing": 3,
+          "observed": 145,
+          "substituted_alternative_source": 46,
+          "substituted_older_year": 1
+        }
+      },
+      "internet": {
+        "available": 187,
+        "missing": 8,
+        "statuses": {
+          "missing": 8,
+          "observed": 180,
+          "substituted_older_year": 7
+        }
+      },
+      "lpi": {
+        "available": 167,
+        "missing": 28,
+        "statuses": {
+          "missing": 28,
+          "observed": 137,
+          "substituted_older_year": 30
+        }
+      },
+      "water": {
+        "available": 187,
+        "missing": 8,
+        "statuses": {
+          "missing": 8,
+          "observed": 183,
+          "substituted_older_year": 4
+        }
+      }
+    },
+    "missing_by_indicator": {
+      "lpi": 28,
+      "water": 8,
+      "gni": 9,
+      "electricity": 3,
+      "internet": 8,
+      "life": 1
+    }
+  },
+  "extended_master": {
+    "count": 219,
+    "score_status": {
+      "insufficient_data": 62,
+      "calculated_with_substitution_or_inference": 108,
+      "fully_observed": 49
+    },
+    "indicator_coverage": {
+      "gni": {
+        "available": 197,
+        "missing": 22,
+        "statuses": {
+          "missing": 22,
+          "observed": 195,
+          "substituted_older_year": 2
+        }
+      },
+      "pct": {
+        "available": 219,
+        "missing": 0,
+        "statuses": {
+          "inferred_zero": 97,
+          "observed": 122
+        }
+      },
+      "nature": {
+        "available": 219,
+        "missing": 0,
+        "statuses": {
+          "inferred_zero": 31,
+          "observed": 188
+        }
+      },
+      "hcr": {
+        "available": 219,
+        "missing": 0,
+        "statuses": {
+          "inferred_zero": 160,
+          "observed": 59
+        }
+      },
+      "life": {
+        "available": 217,
+        "missing": 2,
+        "statuses": {
+          "missing": 2,
+          "observed": 217
+        }
+      },
+      "electricity": {
+        "available": 213,
+        "missing": 6,
+        "statuses": {
+          "missing": 6,
+          "observed": 148,
+          "substituted_alternative_source": 64,
+          "substituted_older_year": 1
+        }
+      },
+      "internet": {
+        "available": 190,
+        "missing": 29,
+        "statuses": {
+          "missing": 29,
+          "observed": 182,
+          "substituted_older_year": 8
+        }
+      },
+      "lpi": {
+        "available": 168,
+        "missing": 51,
+        "statuses": {
+          "missing": 51,
+          "observed": 138,
+          "substituted_older_year": 30
+        }
+      },
+      "water": {
+        "available": 206,
+        "missing": 13,
+        "statuses": {
+          "missing": 13,
+          "observed": 202,
+          "substituted_older_year": 4
+        }
+      }
+    },
+    "missing_by_indicator": {
+      "internet": 29,
+      "lpi": 51,
+      "water": 13,
+      "gni": 22,
+      "electricity": 6,
+      "life": 2
+    }
+  },
+  "electricity_source_comparison": {
+    "overlap": 149,
+    "median_absolute_percent_difference": 8.13312802256345,
+    "p90_absolute_percent_difference": 19.050269954904223
+  },
+  "unmatched": {
+    "un_members": [],
+    "wipo": [],
+    "un_electricity": [
+      "Falkland Islands (Malvinas)",
+      "Other Asia",
+      "Saint Martin (French Part)"
+    ],
+    "nature": [
+      "French Guiana"
+    ],
+    "clarivate": []
+  },
+  "invalid": []
+}
