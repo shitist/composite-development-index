@@ -1,60 +1,144 @@
-# CDI · 综合发展指数
+# Composite Development Index
 
-一个可直接部署到 GitHub Pages 的静态 PWA，用于查询、比较和复算综合发展指数（CDI）。
+The Composite Development Index (CDI) measures national development through four dimensions: economic capacity, knowledge production and technological capability, population health, and infrastructure. Every indicator and dimension is normalized to a 0–100 scale.
 
-## 当前 v1
+**Live site:** [composite-development-index.kisaraginiigata.chatgpt.site](https://composite-development-index.kisaraginiigata.chatgpt.site)
 
-- 195 国查询范围（193 个联合国会员国 + 圣座 + 巴勒斯坦国）
-- 156 国可计算 CDI，39 国明确显示数据不足
-- 国家详情与九项原始数据
-- 中文、English 完整界面，可通过页头切换
-- 国家下拉选择，中英文版均默认显示美国
-- 2–5 国同尺比较
-- 总分及一级维度排名
-- 非可再生资源租金超过 GDP 10% 且科研得分低于 60 时，按连续公式修正 CDI
-- 完整公式、上下限、实际年份、来源与数据状态
-- 区分直接值、旧年份、替代来源、推定零和缺失
-- 响应式手机布局与 PWA 清单
-- 离线应用壳缓存
+The web application provides bilingual country profiles, country comparison, dimension rankings, source records, observation years, and data-status labels. It is a static Progressive Web App and can be installed on desktop and mobile devices.
 
-## 本地查看
+## Current dataset
 
-浏览器的 ES Modules 与 Service Worker 需要通过 HTTP 运行：
+Snapshot: `cdi-2024-v1.1-20260921-global`
+
+The country scope contains 195 states: 193 United Nations member states, the Holy See, and the State of Palestine.
+
+| Ranking | Countries included |
+| --- | ---: |
+| CDI total score | 156 |
+| Economy | 186 |
+| Knowledge and innovation | 195 |
+| Health | 194 |
+| Infrastructure | 159 |
+
+A country enters a dimension ranking when every indicator required by that dimension is available. A CDI total is calculated when all nine indicators and the non-renewable resource-rent input are available.
+
+## CDI formula
+
+Let:
+
+- `E` = economy score
+- `K` = knowledge production, science, and technology score
+- `H` = health score
+- `F` = infrastructure score
+- `P` = resource-dependence adjustment
+
+The final score is:
+
+```text
+CDI* = 0.30E + 0.30K + 0.20H + 0.20F - P
+```
+
+### Normalization functions
+
+All functions return values clipped to the interval `[0, 100]`.
+
+```text
+L(x; a, b) = clip[100 × ln(x/a) / ln(b/a)]
+C(x; b)    = clip[100 × ln(1+x) / ln(1+b)]
+V(x; a, b) = clip[100 × (x-a) / (b-a)]
+```
+
+- `L` is the logarithmic goalpost function.
+- `C` is the zero-inclusive logarithmic count function.
+- `V` is the linear goalpost function.
+
+### Dimensions
+
+| Dimension | Weight | Calculation |
+| --- | ---: | --- |
+| Economy `E` | 30% | `L(GNI per capita, PPP; 1,000, 80,000)` |
+| Knowledge `K` | 30% | `0.40C(PCT; 100,000) + 0.40C(Nature Share; 50,000) + 0.20C(HCR; 3,000)` |
+| Health `H` | 20% | `V(life expectancy; 20, 85)` |
+| Infrastructure `F` | 20% | Mean of electricity, internet use, LPI, and basic drinking-water scores |
+
+Infrastructure indicators are normalized as follows:
+
+```text
+Electricity = L(kWh per person; 500, 10,000)
+Internet    = Internet-use percentage
+LPI         = V(Logistics Performance Index; 1, 5)
+Water       = Population using at least basic drinking-water services (%)
+```
+
+## Resource-dependence adjustment
+
+The adjustment applies to economies with a high non-renewable resource-rent share and a knowledge score below 60.
+
+`N` is the mean non-renewable resource-rent share of GDP for 2017–2021:
+
+```text
+N = mean(total natural resource rents - forest rents)
+```
+
+With `N` expressed in percentage points:
+
+```text
+X = max(N - 10, 0) / 100
+T = [max(60 - K, 0) / 60]²
+P = 0.30E × X × T
+```
+
+`P` is zero when `N ≤ 10` or `K ≥ 60`. The current snapshot applies the adjustment to 24 countries.
+
+## Data selection
+
+- Target-year observations are used when available; otherwise the latest available observation is used and its actual year is retained.
+- UNSD 2022 electricity data are used where the World Bank series has no country value.
+- The PCT, Nature Index, and Highly Cited Researchers source tables contain all reported positive country values; countries absent from those tables are recorded as zero.
+- Dimension scores are calculated independently. Missing data in one dimension do not remove a country from another dimension ranking.
+
+## Sources
+
+- [World Bank World Development Indicators](https://data.worldbank.org/): GNI per capita, life expectancy, electricity use, internet use, logistics performance, drinking-water services, and resource rents
+- [WIPO Statistics Database](https://www.wipo.int/edocs/statistics-country-profile/en/_list/l5.pdf): 2024 PCT applications by country of origin
+- [Nature Index 2025 Research Leaders](https://www.nature.com/nature-index/research-leaders/2025/country/all/global): 2024 country Share
+- [Clarivate Highly Cited Researchers](https://clarivate.com/highly-cited-researchers/): 2025 country counts
+- [UNSD Energy Statistics Pocketbook](https://desapublications.un.org/file/21030/download): 2022 electricity use per capita
+- [World Bank Logistics Performance Index](https://lpi.worldbank.org/): 2023 and earlier LPI editions
+- [United Nations member-state records](https://www.un.org/about-us/member-states): country scope
+
+## Project structure
+
+```text
+index.html                       Application shell
+css/styles.css                   Responsive interface
+js/app.js                        Views and interaction
+js/calculator.js                 CDI calculations
+js/data.js                       Indicator metadata and sources
+data/processed/                  Browser-ready country data
+data/raw/                        Source files
+data/audit/                      Coverage audit outputs
+scripts/                         Data update and audit scripts
+tests/calculator.test.js         Formula and dataset tests
+```
+
+## Run locally
 
 ```powershell
 npx --yes serve .
 ```
 
-然后打开终端显示的本地网址。
+Open the local URL printed by the command.
 
-## 运行测试
+## Test
 
 ```powershell
 npm test
 ```
 
-测试会检查标准化边界、缺失值规则、195 国口径、双语元数据，以及所有可计算国家的浏览器端结果是否与数据审计结果一致。
-
-## 更新数据
-
-数据审计与快照生成脚本：
+## Update the dataset
 
 ```powershell
 python scripts/audit_global_coverage.py
 node scripts/update_resource_rents.mjs
 ```
-
-脚本会更新 `data/raw/`、`data/processed/` 和 `data/audit/`。运行脚本需要 Python、pandas、lxml、openpyxl、pypdf 和 pdfplumber。
-
-## 发布到 GitHub Pages
-
-1. 把整个目录提交到 GitHub 仓库的默认分支。
-2. 打开仓库的 `Settings → Pages`。
-3. 在 `Build and deployment` 中选择 `Deploy from a branch`。
-4. 选择默认分支和 `/(root)`，保存。
-
-GitHub Pages 会把同一套页面发布到桌面和手机。手机浏览器访问后，可通过浏览器菜单“添加到主屏幕”。
-
-## 数据与方法
-
-当前快照编号：`cdi-2024-v1.1-20260921-global`。资源依赖修正采用世界银行 2017—2021 年数据，以总自然资源租金减去森林租金得到非可再生资源租金；五年平均值不超过 GDP 10% 时不修正，超过后只计算高于 10% 的部分。
