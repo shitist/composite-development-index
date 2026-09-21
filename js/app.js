@@ -1,5 +1,6 @@
 import { calculateDataset, FORMULA_VERSION } from "./calculator.js?v=20260921b";
 import { DIMENSIONS, INDICATORS, SNAPSHOT, SOURCES, STATUS_LABELS } from "./data.js?v=20260921b";
+import { resolveDeviceLanguage } from "./locale.js?v=20260921c";
 
 const indicatorEntries = Object.entries(INDICATORS);
 const dimensionEntries = Object.entries(DIMENSIONS);
@@ -226,7 +227,7 @@ function initialLanguage() {
   } catch {
     // The app still works when storage is unavailable.
   }
-  return "zh";
+  return resolveDeviceLanguage(navigator.languages?.length ? navigator.languages : navigator.language);
 }
 
 const state = {

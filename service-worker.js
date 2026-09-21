@@ -1,11 +1,12 @@
-const CACHE_NAME = "cdi-v1.1-dimension-rankings-20260921b";
+const CACHE_NAME = "cdi-v1.1-device-language-20260921c";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./css/styles.css?v=20260921b",
-  "./js/app.js?v=20260921b",
+  "./js/app.js?v=20260921c",
   "./js/calculator.js?v=20260921b",
   "./js/data.js?v=20260921b",
+  "./js/locale.js?v=20260921c",
   "./data/processed/global-cdi-coverage.json",
   "./data/processed/nonrenewable-resource-rents-2017-2021.json",
   "./manifest.webmanifest",

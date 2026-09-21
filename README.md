@@ -4,7 +4,7 @@ The Composite Development Index (CDI) measures national development through four
 
 **Live site:** [composite-development-index.kisaraginiigata.chatgpt.site](https://composite-development-index.kisaraginiigata.chatgpt.site)
 
-The web application provides bilingual country profiles, country comparison, dimension rankings, source records, observation years, and data-status labels. It is a static Progressive Web App and can be installed on desktop and mobile devices.
+The web application provides bilingual country profiles, country comparison, dimension rankings, source records, observation years, and data-status labels. A first visit follows the browser's language; a manual language choice is saved for later visits. It is a static Progressive Web App and can be installed on desktop and mobile devices.
 
 ## Current dataset
 
@@ -115,6 +115,7 @@ css/styles.css                   Responsive interface
 js/app.js                        Views and interaction
 js/calculator.js                 CDI calculations
 js/data.js                       Indicator metadata and sources
+js/locale.js                     Browser-language resolution
 data/processed/                  Browser-ready country data
 data/raw/                        Source files
 data/audit/                      Coverage audit outputs
