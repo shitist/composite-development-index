@@ -1,9 +1,10 @@
-const CACHE_NAME = "cdi-v1.1-visual-refinement-20260922a";
+const CACHE_NAME = "cdi-v1.1-numerals-20260923a";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./css/styles.css?v=20260922a",
-  "./css/refinement.css?v=20260922a",
+  "./css/refinement.css?v=20260923a",
+  "./assets/fonts/inter-variable.woff2",
   "./js/app.js?v=20260922b",
   "./js/country-motion.js?v=20260922b",
   "./js/calculator.js?v=20260921b",

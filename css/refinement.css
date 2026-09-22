@@ -1,5 +1,17 @@
 /* Editorial refinement: presentation only; data and interactions stay in app.js. */
+@font-face {
+  font-family: "CDI Numerals";
+  src: url("../assets/fonts/inter-variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+0025, U+002B-0039, U+2013, U+2212;
+}
+
 :root {
+  --data-font: "CDI Numerals", "IBM Plex Sans", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  font-family: var(--data-font);
+  font-optical-sizing: none;
   --ink: #171715;
   --muted: #686861;
   --line: #deded7;
@@ -148,6 +160,15 @@ select:disabled { opacity: 0.5; cursor: default; }
 .resource-adjustment__facts { border-left-color: var(--line); }
 .resource-adjustment__facts > div { padding: 24px; gap: 16px; }
 .resource-adjustment__facts dd { font-size: 26px; }
+.data-table code, .method-grid code, .method-dimensions code,
+.formula-hero code, .resource-method code { font-family: var(--data-font); }
+.ranking-row > strong, .comparison-row > strong, .dimension-row__score,
+.dimension-row__contribution strong, .resource-adjustment__facts dd,
+.data-table td, .method-dimensions__weight {
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: 0;
+}
+.score-hero__value { font-variant-numeric: lining-nums tabular-nums; letter-spacing: -0.045em; }
 .tweaks { box-shadow: 0 12px 40px #17171516; }
 .tweaks input { accent-color: var(--accent); }
 
@@ -252,6 +273,13 @@ select:disabled { opacity: 0.5; cursor: default; }
   .score-hero__number, .score-hero__rank { padding: 20px 12px; min-height: 148px; }
   .score-hero__value { font-size: 56px; }
   .score-hero__rank strong { font-size: 30px; }
+}
+
+/* Bound large numerals to their own cell, including three-digit rankings. */
+@supports (font-size: 1cqi) {
+  .score-hero__number, .score-hero__rank { container-type: inline-size; }
+  .score-hero__number .score-hero__value { font-size: min(clamp(56px, 10vw, 138px), 36cqi); }
+  .score-hero__rank strong:not(.status-word) { font-size: clamp(16px, 24cqi, 66px); letter-spacing: -0.02em; }
 }
 
 @media (prefers-reduced-motion: reduce) {
