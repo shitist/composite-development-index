@@ -1,11 +1,13 @@
-const CACHE_NAME = "cdi-v1.1-numerals-20260923a";
+const CACHE_NAME = "cdi-v1.1-regions-compare-20260923b";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./css/styles.css?v=20260922a",
-  "./css/refinement.css?v=20260923a",
+  "./css/refinement.css?v=20260923b",
   "./assets/fonts/inter-variable.woff2",
-  "./js/app.js?v=20260922b",
+  "./js/app.js?v=20260923b",
+  "./js/regions.js?v=20260923a",
+  "./js/compare-picker.js?v=20260923a",
   "./js/country-motion.js?v=20260922b",
   "./js/calculator.js?v=20260921b",
   "./js/data.js?v=20260921b",

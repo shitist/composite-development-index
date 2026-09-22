@@ -120,6 +120,15 @@ select:disabled { opacity: 0.5; cursor: default; }
 .compare-token span { color: var(--muted); }
 .compare-token:hover:enabled { border-color: var(--accent); color: var(--accent); }
 .compare-add-label { font-size: 10px; }
+.selector-block__heading { flex-wrap: wrap; }
+#compare-clear { border: 0; background: transparent; padding: 8px 0; color: var(--muted); font-size: 12px; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
+#compare-clear:hover:enabled { color: var(--accent); }
+#compare-clear:disabled { opacity: 0.4; cursor: default; }
+.compare-empty { margin: 0; color: var(--muted); font-size: 14px; }
+#compare-picker .country-picker__input { font-size: 15px; }
+#compare-picker .country-picker__input:focus-visible { outline: none; }
+#compare-picker .country-picker__input:disabled, #compare-picker .country-picker__toggle:disabled { opacity: 0.45; cursor: default; }
+.country-picker__option.is-active { background: var(--soft); }
 .compare-add-label select { background: transparent; }
 .comparison-row { grid-template-columns: minmax(150px, 3fr) minmax(0, 8fr) 80px; }
 .comparison-row strong { font-size: 25px; font-weight: 500; letter-spacing: -0.04em; }

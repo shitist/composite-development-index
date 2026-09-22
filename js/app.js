@@ -2,14 +2,18 @@ import { calculateDataset, FORMULA_VERSION } from "./calculator.js?v=20260921b";
 import { DIMENSIONS, INDICATORS, SNAPSHOT, SOURCES, STATUS_LABELS } from "./data.js?v=20260921b";
 import { resolveDeviceLanguage } from "./locale.js?v=20260921c";
 import { createCountryMotion } from "./country-motion.js?v=20260922b";
+import { countryRegion } from "./regions.js?v=20260923a";
+import { bindComparePicker } from "./compare-picker.js?v=20260923a";
 
 const mountCountryMotion = createCountryMotion();
+let disposeComparePicker = () => {};
 
 const indicatorEntries = Object.entries(INDICATORS);
 const dimensionEntries = Object.entries(DIMENSIONS);
 const regionNames = {
   "East Asia & Pacific": { zh: "东亚与太平洋", en: "East Asia & Pacific" },
-  "Europe & Central Asia": { zh: "欧洲与中亚", en: "Europe & Central Asia" },
+  "Europe": { zh: "欧洲", en: "Europe" },
+  "Central Asia": { zh: "中亚", en: "Central Asia" },
   "Latin America & Caribbean": { zh: "拉丁美洲与加勒比", en: "Latin America & Caribbean" },
   "Middle East, North Africa, Afghanistan & Pakistan": { zh: "中东、北非、阿富汗与巴基斯坦", en: "Middle East, North Africa, Afghanistan & Pakistan" },
   "North America": { zh: "北美", en: "North America" },
@@ -76,6 +80,8 @@ const TEXT = {
     points: "分",
     compareTitle: "国家比较",
     compareSet: "比较对象",
+    clearCompare: "清空",
+    emptyCompare: "尚未选择国家",
     addCountry: "添加国家",
     chooseCountry: "选择一个国家",
     totalScore: "总分",
@@ -176,6 +182,8 @@ const TEXT = {
     points: "points",
     compareTitle: "Country Comparison",
     compareSet: "Countries",
+    clearCompare: "Clear",
+    emptyCompare: "No countries selected",
     addCountry: "Add country",
     chooseCountry: "Choose a country",
     totalScore: "Total score",
@@ -273,7 +281,7 @@ async function loadCountries() {
         iso2: country.iso2,
         name: nameZh,
         nameEn: country.name,
-        regionKey: country.region.trim(),
+        regionKey: countryRegion(country.iso3, country.region),
         scoreStatus: country.score_status,
         auditScore: country.cdi,
         resourceRent,
@@ -536,8 +544,8 @@ function renderCountry() {
   const pickerInput = document.querySelector("#country-picker-input");
   const pickerToggle = document.querySelector("#country-picker-toggle");
   const pickerMenu = document.querySelector("#country-picker-menu");
-  const pickerOptionsContainer = document.querySelector(".country-picker__options");
-  const pickerOptions = [...document.querySelectorAll(".country-picker__option")];
+  const pickerOptionsContainer = picker.querySelector(".country-picker__options");
+  const pickerOptions = [...picker.querySelectorAll(".country-picker__option")];
   const pickerEmpty = document.querySelector("#country-picker-empty");
   const selectedOption = pickerOptions.find((option) => option.dataset.countryCode === country.code);
   const showAllOptions = () => {
@@ -617,8 +625,10 @@ function renderCountry() {
 }
 
 function renderCompare() {
+  disposeComparePicker();
   const selected = [...state.compareCodes].map(countryByCode).filter((country) => country.result.eligible);
-  const available = ranked.filter((country) => !state.compareCodes.has(country.code));
+  const available = ranked.filter((country) => !state.compareCodes.has(country.code))
+    .sort((a, b) => countryName(a, false).localeCompare(countryName(b, false), state.language === "en" ? "en" : "zh-CN"));
   views.get("compare").innerHTML = `
     <div class="page-shell">
       <header class="page-intro page-intro--compact">
@@ -627,21 +637,30 @@ function renderCompare() {
       </header>
 
       <section class="selector-block" aria-labelledby="compare-selector-title">
-        <div class="selector-block__heading"><h2 id="compare-selector-title">${t("compareSet")}</h2><span>${selected.length} / 5</span></div>
+        <div class="selector-block__heading"><h2 id="compare-selector-title">${t("compareSet")}</h2><span>${selected.length} / 5</span><button id="compare-clear" type="button" ${selected.length ? "" : "disabled"}>${t("clearCompare")}</button></div>
         <div>
           <div class="selected-countries">
-            ${selected.map((country) => `<button class="compare-token" type="button" data-remove-code="${country.code}" ${selected.length <= 2 ? "disabled" : ""}>${escapeHtml(countryName(country))}<span aria-hidden="true">×</span></button>`).join("")}
+            ${selected.map((country) => `<button class="compare-token" type="button" data-remove-code="${country.code}">${escapeHtml(countryName(country))}<span aria-hidden="true">×</span></button>`).join("") || `<p class="compare-empty">${t("emptyCompare")}</p>`}
           </div>
-          <label class="compare-add-label">${t("addCountry")}
-            <select id="compare-add" ${selected.length >= 5 ? "disabled" : ""}>
-              <option value="">${t("chooseCountry")}</option>
-              ${available.map((country) => `<option value="${country.code}">${escapeHtml(countryName(country))} · ${country.code}</option>`).join("")}
-            </select>
-          </label>
+          <div class="compare-add-label">
+            <span id="compare-add-label">${t("addCountry")}</span>
+            <div id="compare-picker" class="country-picker">
+              <div class="country-picker__control">
+                <input id="compare-add" class="country-picker__input" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="compare-picker-options" aria-labelledby="compare-add-label" placeholder="${t("filterCountries")}" autocomplete="off" spellcheck="false" ${selected.length >= 5 ? "disabled" : ""} />
+                <button class="country-picker__toggle" type="button" aria-label="${t("addCountry")}" aria-haspopup="listbox" aria-expanded="false" aria-controls="compare-picker-options" ${selected.length >= 5 ? "disabled" : ""}></button>
+              </div>
+              <div class="country-picker__menu" hidden>
+                <div id="compare-picker-options" class="country-picker__options" role="listbox" aria-labelledby="compare-add-label">
+                  ${available.map(country => `<button id="compare-option-${country.code}" class="country-picker__option" type="button" role="option" aria-selected="false" data-add-code="${country.code}" data-search="${escapeHtml(`${country.name} ${country.nameEn} ${country.code}`.toLocaleLowerCase())}">${escapeHtml(countrySearchLabel(country))}</button>`).join("")}
+                </div>
+                <p class="country-picker__empty" hidden>${t("noCountries")}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section class="content-section compare-section" aria-labelledby="compare-chart-title">
+      <section class="content-section compare-section" aria-labelledby="compare-chart-title" ${selected.length ? "" : "hidden"}>
         <div class="section-heading"><div>${sectionKicker(2, t("totalScore"))}<h2 id="compare-chart-title">${t("cdiTotal")}</h2></div></div>
         <div class="comparison-bars">
           ${selected.map((country, index) => `
@@ -653,7 +672,7 @@ function renderCompare() {
         </div>
       </section>
 
-      <section class="content-section" aria-label="${t("dimensionsComparison")}">
+      <section class="content-section" aria-label="${t("dimensionsComparison")}" ${selected.length ? "" : "hidden"}>
         <div class="table-wrap">
           <table class="data-table comparison-table">
             <thead><tr><th>${t("country")}</th><th>CDI</th>${dimensionEntries.map(([, meta]) => `<th>${escapeHtml(dimensionLabel(meta, true))}</th>`).join("")}</tr></thead>
@@ -663,14 +682,19 @@ function renderCompare() {
       </section>
     </div>`;
 
-  document.querySelector("#compare-add").addEventListener("change", (event) => {
-    if (!event.target.value || state.compareCodes.size >= 5) return;
-    state.compareCodes.add(event.target.value);
+  disposeComparePicker = bindComparePicker(document.querySelector("#compare-picker"), code => {
+    if (state.compareCodes.size >= 5 || state.compareCodes.has(code)) return;
+    state.compareCodes.add(code);
     renderCompare();
+    if (state.compareCodes.size < 5) document.querySelector("#compare-add").focus();
+  });
+  document.querySelector("#compare-clear").addEventListener("click", () => {
+    state.compareCodes.clear();
+    renderCompare();
+    document.querySelector("#compare-add").focus();
   });
   document.querySelectorAll("[data-remove-code]").forEach((button) => {
     button.addEventListener("click", () => {
-      if (state.compareCodes.size <= 2) return;
       state.compareCodes.delete(button.dataset.removeCode);
       renderCompare();
     });
@@ -718,7 +742,7 @@ function renderRanking() {
   document.querySelector("#ranking-sort").value = state.rankingSort;
   document.querySelector("#ranking-sort").addEventListener("change", (event) => { state.rankingSort = event.target.value; renderRanking(); });
   document.querySelector("#ranking-region").addEventListener("change", (event) => { state.rankingRegion = event.target.value; renderRanking(); });
-  document.querySelectorAll("[data-country-code]").forEach((row) => {
+  views.get("ranking").querySelectorAll("[data-country-code]").forEach((row) => {
     row.addEventListener("click", () => {
       state.selectedCode = row.dataset.countryCode;
       renderAll();
