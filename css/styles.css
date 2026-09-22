@@ -514,6 +514,7 @@ input[type="search"] {
 }
 
 .score-hero__value {
+  font-variant-numeric: tabular-nums;
   font-size: clamp(80px, 10vw, 156px);
   font-weight: 600;
   letter-spacing: -0.08em;
@@ -716,6 +717,7 @@ input[type="search"] {
 }
 
 .dimension-row__score {
+  font-variant-numeric: tabular-nums;
   font-weight: 600;
   text-align: right;
 }
@@ -728,6 +730,7 @@ input[type="search"] {
 }
 
 .dimension-row__contribution strong {
+  font-variant-numeric: tabular-nums;
   font-size: 24px;
   font-weight: 500;
 }

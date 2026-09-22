@@ -1,6 +1,9 @@
 import { calculateDataset, FORMULA_VERSION } from "./calculator.js?v=20260921b";
 import { DIMENSIONS, INDICATORS, SNAPSHOT, SOURCES, STATUS_LABELS } from "./data.js?v=20260921b";
 import { resolveDeviceLanguage } from "./locale.js?v=20260921c";
+import { createCountryMotion } from "./country-motion.js?v=20260922b";
+
+const mountCountryMotion = createCountryMotion();
 
 const indicatorEntries = Object.entries(INDICATORS);
 const dimensionEntries = Object.entries(DIMENSIONS);
@@ -455,7 +458,7 @@ function renderCountry() {
         </div>
         <div class="score-hero__number">
           ${result.eligible
-            ? `<span class="score-hero__value">${formatScore(result.total)}</span>`
+            ? `<span role="img" aria-label="CDI ${formatScore(result.total)}"><span class="score-hero__value" aria-hidden="true">${formatScore(result.total)}</span></span>`
             : `<span class="score-hero__unavailable">${t("noScore")}</span>`}
         </div>
         <div class="score-hero__rank">${rankMarkup}</div>
@@ -489,9 +492,9 @@ function renderCountry() {
                 <div class="dimension-row__label"><h3>${escapeHtml(dimensionLabel(meta))}</h3><span>${t("weight")} ${(meta.weight * 100).toFixed(0)}%</span></div>
                 <div class="dimension-row__measure">
                   ${bar(result.dimensions[key], dimensionLabel(meta))}
-                  <span class="dimension-row__score">${formatScore(result.dimensions[key])}</span>
+                  <span class="dimension-row__score" role="img" aria-label="${formatScore(result.dimensions[key])}">${formatScore(result.dimensions[key])}</span>
                 </div>
-                <div class="dimension-row__contribution"><span>${t("contribution")}</span><strong>${formatScore(result.contributions[key])}</strong></div>
+                <div class="dimension-row__contribution"><span>${t("contribution")}</span><strong role="img" aria-label="${formatScore(result.contributions[key])}">${formatScore(result.contributions[key])}</strong></div>
               </article>`).join("")}
           </div>
         </section>` : `
@@ -529,6 +532,7 @@ function renderCountry() {
     </div>`;
 
   const picker = document.querySelector("#country-picker");
+  mountCountryMotion(views.get("country"), country.code);
   const pickerInput = document.querySelector("#country-picker-input");
   const pickerToggle = document.querySelector("#country-picker-toggle");
   const pickerMenu = document.querySelector("#country-picker-menu");

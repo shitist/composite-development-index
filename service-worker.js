@@ -1,9 +1,11 @@
-const CACHE_NAME = "cdi-v1.1-device-language-20260921c";
+const CACHE_NAME = "cdi-v1.1-visual-refinement-20260922a";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./css/styles.css?v=20260921b",
-  "./js/app.js?v=20260921c",
+  "./css/styles.css?v=20260922a",
+  "./css/refinement.css?v=20260922a",
+  "./js/app.js?v=20260922b",
+  "./js/country-motion.js?v=20260922b",
   "./js/calculator.js?v=20260921b",
   "./js/data.js?v=20260921b",
   "./js/locale.js?v=20260921c",
