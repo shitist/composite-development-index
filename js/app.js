@@ -613,9 +613,8 @@ function renderCountry() {
       pickerInput.select();
     }
   });
-  picker.addEventListener("focusout", (event) => {
-    if (!picker.contains(event.relatedTarget)) setPickerOpen(false);
-  });
+  // A touch can focus <main> before click reaches the option on iOS.
+  // Dismiss on outside clicks or keyboard navigation, not this focus change.
   pickerOptions.forEach((option) => {
     option.addEventListener("click", () => {
       state.selectedCode = option.dataset.countryCode;
@@ -918,6 +917,11 @@ function setupCountryPickerDismissal() {
   document.addEventListener("click", (event) => {
     const picker = document.querySelector("#country-picker");
     if (picker && !picker.contains(event.target)) closePicker();
+  });
+  document.addEventListener("keyup", (event) => {
+    if (event.key !== "Tab") return;
+    const picker = document.querySelector("#country-picker");
+    if (picker && !picker.contains(document.activeElement)) closePicker();
   });
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;

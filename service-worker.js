@@ -1,11 +1,11 @@
-const CACHE_NAME = "cdi-v1.1-regions-compare-20260923b";
+const CACHE_NAME = "cdi-v1.1-touch-picker-20261001a";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./css/styles.css?v=20260922a",
   "./css/refinement.css?v=20260923b",
   "./assets/fonts/inter-variable.woff2",
-  "./js/app.js?v=20260923b",
+  "./js/app.js?v=20261001a",
   "./js/regions.js?v=20260923a",
   "./js/compare-picker.js?v=20260923a",
   "./js/country-motion.js?v=20260922b",
